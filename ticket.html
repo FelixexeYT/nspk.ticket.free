@@ -7,44 +7,38 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
-<body>
-    <div class="ticket-wrapper" id="ticketToDownload">
-        <h1>Уведомление об оплате</h1>
+<body class="ticket-body">
+    <div class="ticket-page" id="ticketToDownload">
+        <h1 class="header-title">Уведомление об оплате</h1>
         
         <p class="success-text">Ваш проезд успешно оплачен!</p>
 
-        <div class="ticket-details">
-            <div class="detail-row">
+        <div class="payment-info">
+            <div class="payment-info__vehicle-type">
                 <span id="displayType"></span>: №<span id="displayRoute"></span>
             </div>
-            <div class="detail-row price-row">
-                <span id="displayPrice"></span> <span>₽</span>
+            <div class="payment-info__price">
+                <span id="displayPrice"></span><span class="currency">₽</span>
             </div>
-            <div class="detail-row">
-                <span id="displayDate"></span>
-            </div>
-            <div class="detail-row">
-                <span>Т/С: </span><span id="displayVehicle"></span>
-            </div>
+            <div class="payment-info__date" id="displayDate"></div>
+            <div class="payment-info__vehicle-number">Т/С: <span id="displayVehicle"></span></div>
         </div>
 
-        <div class="timer-section">
-            <p>С момента оплаты прошло:</p>
-            <div class="timer" id="timerDisplay">00:00:00</div>
+        <div class="payment-timer">
+            <p class="payment-timer__label">С момента оплаты прошло:</p>
+            <div class="payment-timer__value" id="timerDisplay">00:00:00</div>
         </div>
 
-        <div class="qr-section">
+        <div class="ticket__qrcode">
             <img id="qrCode" src="" alt="QR-код билета">
         </div>
 
-        <div class="info-text">
-            <p>Предъявите контролеру QR-код.</p>
-            <p>Чтобы сохранить реквизиты билета, нажмите кнопку «Скачать»</p>
+        <div class="ticket__info">
+            Предъявите контролеру QR-код.<br>
+            Чтобы сохранить реквизиты билета, нажмите кнопку «Скачать»
         </div>
 
-        <div class="button-section">
-            <button id="downloadBtn" class="btn-download">Скачать билет</button>
-        </div>
+        <button class="ticket__button" id="downloadBtn">Скачать билет</button>
     </div>
 
     <script>
@@ -57,7 +51,6 @@
             }
 
             const data = JSON.parse(savedData);
-            console.log("Загружены данные билета:", data);
 
             document.getElementById('displayType').textContent = data.type;
             document.getElementById('displayRoute').textContent = data.route;
@@ -65,10 +58,10 @@
             document.getElementById('displayPrice').textContent = data.price;
             document.getElementById('displayDate').textContent = data.date;
 
-            // QR-код
+            // QR-код (минимум 41x41 модулей = картинка 410x410)
             const typeEng = data.type === 'Автобус' ? 'bus' : 'trolleybus';
             const qrText = 'Транспорт: ' + typeEng + ', Маршрут: ' + data.route + ', ТС: ' + data.vehicle + ', Время входа: ' + data.date + ', Стоимость: ' + data.price + '₽';
-            document.getElementById('qrCode').src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(qrText);
+            document.getElementById('qrCode').src = 'https://api.qrserver.com/v1/create-qr-code/?size=410x410&margin=0&data=' + encodeURIComponent(qrText);
 
             // Таймер вверх от 0
             let timeElapsed = 0;
@@ -90,9 +83,12 @@
             updateTimer();
             setInterval(updateTimer, 1000);
 
-            // Скачивание
+            // Скачивание билета
             document.getElementById('downloadBtn').addEventListener('click', function() {
-                html2canvas(document.getElementById('ticketToDownload')).then(function(canvas) {
+                html2canvas(document.getElementById('ticketToDownload'), {
+                    scale: 2,
+                    backgroundColor: '#ffffff'
+                }).then(function(canvas) {
                     const link = document.createElement('a');
                     link.download = 'ticket.png';
                     link.href = canvas.toDataURL('image/png');
