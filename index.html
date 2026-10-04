@@ -25,6 +25,38 @@
             <label for="ticketPrice">Стоимость проезда:</label>
             <input type="number" id="ticketPrice" placeholder="Введите стоимость" required>
 
+            <button type="submit" id="continueBtn">Продолжить</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Данные билета</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Данные билета</h1>
+        <form id="ticketForm">
+            <label for="transportType">Вид транспорта:</label>
+            <select id="transportType">
+                <option value="Автобус">Автобус</option>
+                <option value="Троллейбус">Троллейбус</option>
+            </select>
+
+            <label for="routeNumber">Номер маршрута:</label>
+            <input type="text" id="routeNumber" placeholder="Введите номер маршрута" required>
+
+            <label for="vehicleNumber">Номер ТС:</label>
+            <input type="text" id="vehicleNumber" placeholder="Введите номер ТС" required>
+
+            <label for="ticketPrice">Стоимость проезда:</label>
+            <input type="number" id="ticketPrice" placeholder="Введите стоимость" required>
+
             <!-- Поле с датой УДАЛЕНО, оно будет подставляться само -->
 
             <button type="submit" id="continueBtn">Продолжить</button>
