@@ -46,7 +46,60 @@
             <button id="downloadBtn" class="btn-download">Скачать билет</button>
         </div>
     </div>
-    
-    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = localStorage.getItem('userTicket');
+
+            if (!savedData) {
+                document.body.innerHTML = '<div style="text-align:center; padding:50px; font-family:sans-serif;"><h2>Данные билета не найдены</h2><p>Пожалуйста, вернитесь на <a href="index.html">главную страницу</a> и заполните форму.</p></div>';
+                return;
+            }
+
+            const data = JSON.parse(savedData);
+            console.log("Загружены данные билета:", data);
+
+            document.getElementById('displayType').textContent = data.type;
+            document.getElementById('displayRoute').textContent = data.route;
+            document.getElementById('displayVehicle').textContent = data.vehicle;
+            document.getElementById('displayPrice').textContent = data.price;
+            document.getElementById('displayDate').textContent = data.date;
+
+            // QR-код
+            const typeEng = data.type === 'Автобус' ? 'bus' : 'trolleybus';
+            const qrText = 'Транспорт: ' + typeEng + ', Маршрут: ' + data.route + ', ТС: ' + data.vehicle + ', Время входа: ' + data.date + ', Стоимость: ' + data.price + '₽';
+            document.getElementById('qrCode').src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(qrText);
+
+            // Таймер вверх от 0
+            let timeElapsed = 0;
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            function updateTimer() {
+                const hours = Math.floor(timeElapsed / 3600);
+                const minutes = Math.floor((timeElapsed % 3600) / 60);
+                const seconds = timeElapsed % 60;
+
+                timerDisplay.textContent = 
+                    String(hours).padStart(2, '0') + ':' + 
+                    String(minutes).padStart(2, '0') + ':' + 
+                    String(seconds).padStart(2, '0');
+
+                timeElapsed++;
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+
+            // Скачивание
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                html2canvas(document.getElementById('ticketToDownload')).then(function(canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'ticket.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            });
+        });
+    </script>
 </body>
 </html>
