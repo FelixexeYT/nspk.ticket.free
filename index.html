@@ -9,6 +9,84 @@
 <body>
     <div class="card">
         <h1>Данные билета</h1>
+        <!-- onsubmit="return false;" - страховка от перезагрузки -->
+        <form id="ticketForm" onsubmit="return false;">
+            <label for="transportType">Вид транспорта:</label>
+            <select id="transportType">
+                <option value="Автобус">Автобус</option>
+                <option value="Троллейбус">Троллейбус</option>
+            </select>
+
+            <label for="routeNumber">Номер маршрута:</label>
+            <input type="text" id="routeNumber" placeholder="Введите номер маршрута" required>
+
+            <label for="vehicleNumber">Номер ТС:</label>
+            <input type="text" id="vehicleNumber" placeholder="Введите номер ТС" required>
+
+            <label for="ticketPrice">Стоимость проезда:</label>
+            <input type="number" id="ticketPrice" placeholder="Введите стоимость" required>
+
+            <!-- type="button" вместо type="submit" - кнопка больше не отправляет форму -->
+            <button type="button" id="continueBtn">Продолжить</button>
+        </form>
+    </div>
+
+    <!-- Скрипт прямо здесь, внутри файла -->
+    <script>
+        document.getElementById('continueBtn').addEventListener('click', function() {
+            console.log("Кнопка нажата");
+
+            // Проверяем, что все поля заполнены
+            const type = document.getElementById('transportType').value;
+            const route = document.getElementById('routeNumber').value;
+            const vehicle = document.getElementById('vehicleNumber').value;
+            const price = document.getElementById('ticketPrice').value;
+
+            if (!route || !vehicle || !price) {
+                alert("Пожалуйста, заполните все поля!");
+                return;
+            }
+
+            // Автоматически берем текущую дату и время
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const formattedDate = day + '.' + month + '.' + year + ', ' + hours + ':' + minutes + ':' + seconds;
+
+            // Собираем данные
+            const ticketData = {
+                type: type,
+                route: route,
+                vehicle: vehicle,
+                price: price,
+                date: formattedDate
+            };
+
+            console.log("Сохраняем данные:", ticketData);
+
+            // Сохраняем
+            localStorage.setItem('userTicket', JSON.stringify(ticketData));
+
+            // Переходим на страницу билета
+            window.location.href = 'ticket.html';
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Данные билета</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Данные билета</h1>
         <form id="ticketForm">
             <label for="transportType">Вид транспорта:</label>
             <select id="transportType">
