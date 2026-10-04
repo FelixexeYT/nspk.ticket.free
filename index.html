@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уведомление об оплате</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Подключаем библиотеку для скачивания билета как картинки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="ticket-wrapper" id="ticketToDownload">
+        <h1>Уведомление об оплате</h1>
+        
+        <p class="success-text">Ваш проезд успешно оплачен!</p>
+
+        <div class="ticket-details">
+            <div class="detail-row">
+                <span id="displayType"></span>: №<span id="displayRoute"></span>
+            </div>
+            <div class="detail-row price-row">
+                <span id="displayPrice"></span> <span>₽</span>
+            </div>
+            <div class="detail-row">
+                <span id="displayDate"></span>
+            </div>
+            <div class="detail-row">
+                <span>Т/С: </span><span id="displayVehicle"></span>
+            </div>
+        </div>
+
+        <div class="timer-section">
+            <p>С момента оплаты прошло:</p>
+            <div class="timer" id="timerDisplay">00:00:00</div>
+        </div>
+
+        <div class="qr-section">
+            <img id="qrCode" src="" alt="QR-код билета">
+        </div>
+
+        <div class="info-text">
+            <p>Предъявите контролеру QR-код.</p>
+            <p>Чтобы сохранить реквизиты билета, нажмите кнопку «Скачать»</p>
+        </div>
+
+        <div class="button-section">
+            <button id="downloadBtn" class="btn-download">Скачать билет</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
